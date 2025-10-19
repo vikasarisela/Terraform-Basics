@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 variable "roboshop" {
 #  default = ["mongodb","redis"]
   
@@ -10,4 +11,8 @@ variable "roboshop" {
 
 variable "domainname" {
   default = "cloudskills.fun"
+=======
+variable "environment" {
+  default = "dev"
+>>>>>>> 24284a1169883b2580aaa8b0cc685bc99b888657
 }
