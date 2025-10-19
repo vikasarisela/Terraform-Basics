@@ -1,9 +1,10 @@
 resource "aws_instance" "my_ec2_instance" {
+  for_each = var.environment
   ami           = "ami-09c813fb71547fc4f" # Replace with a valid AMI ID for your region
-  instance_type = var.environment == "dev" ? "t2.mciro" : "t3.medium"
+  instance_type = each.value
   vpc_security_group_ids = [aws_security_group.allow-all.id]
   tags = {
-    Name = "MyTerraformEC2"
+    Name = each.key
   }
   # Optional: User data to run a script on instance launch
   # user_data = file("install_script.sh")
