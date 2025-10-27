@@ -1,11 +1,20 @@
-resource "aws_instance" "ec2instance" {
-
-
-ami           = "ami-09c813fb71547fc4f" # Replace with a valid AMI ID for your region
-  instance_type = "t3.micro"
- 
+resource "aws_instance" "my_ec2_instance_naming" {
+  ami           = var.ami_id # Replace with a valid AMI ID for your region
+  instance_type = var.instance_type
+  vpc_security_group_ids = [aws_security_group.allow-all.id]
   tags = {
-    name = "terraform remote state"
+    Name = "MyTerraformEC2"
+    #tag will be added in the Name, in tags tab also it will add
+  }
+
+  provisioner "local-exec" {
+     command = "echo ${self.private_ip} > inventory"
+     on_failure = continue
+  }
+
+  provisioner "local-exec" {
+     command = "instance is destroyed"
+     when = destroy
   }
   # Optional: User data to run a script on instance launch
   # user_data = file("install_script.sh")
