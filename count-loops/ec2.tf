@@ -1,19 +1,19 @@
 resource "aws_instance" "my_ec2_instance" {
- for_each = var.environment  
-  #for_each = toset(var.environment)
-
+  count = 3
   ami           = "ami-09c813fb71547fc4f" # Replace with a valid AMI ID for your region
-  instance_type = each.value
-  vpc_security_group_ids = [aws_security_group.allow-all.id]
+  instance_type = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.allow-all.id]   #attaching security group we can add list 
   tags = {
-    Name = each.key
+    Name = var.instances[count.index]
   }
   # Optional: User data to run a script on instance launch
   # user_data = file("install_script.sh")
 }
 
+# name = real name (unique)
+# Name = tag label (for humans)
 resource "aws_security_group" "allow-all" {
-  name   = "allow-all"
+  name   = "allow-alling"    # unique its aws object name within same vpc
   
   egress {
     from_port        = 0   # all ports 

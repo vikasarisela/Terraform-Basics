@@ -1,10 +1,7 @@
 variable "environment" {
 #  default = ["mongodb","redis"]
   
-  default = {
-    mongodb = "t2.micro"
-    redis   = "t2.micro"
-  }
+  default = "dev"
 
 }
 

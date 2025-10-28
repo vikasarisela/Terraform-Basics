@@ -4,5 +4,5 @@ resource "aws_route53_record" "www" {
   type    = "A"
   ttl     = 1
   records = [aws_instance.my_ec2_instance[count.index].private_ip] 
-  allow_overwrite = true
+  allow_overwrite = true  # overwrites the previous records without fail
 }
