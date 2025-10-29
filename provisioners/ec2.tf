@@ -6,15 +6,34 @@ resource "aws_instance" "my_ec2_instance_naming" {
     Name = "MyTerraformEC2"
     #tag will be added in the Name, in tags tab also it will add
   }
-
-  provisioner "local-exec" {
+    provisioner "local-exec" {
+     command = "echo 'instance is destroyed'"
+     when = destroy
+    } 
+   provisioner "local-exec" {
      command = "echo ${self.private_ip} > inventory"
      on_failure = continue
-  }
+   }
+    connection {
+      type        = "ssh"
+      user        = "ec2-user" # Or appropriate user for your AMI
+      password = "DevOps321" # Path to your private key
+      host        = self.public_ip
+    }
+   provisioner "remote-exec" {
+    inline = [
+      "sudo dnf install -y nginx",
+      "sudo systemctl start nginx",
+    ]
 
-  provisioner "local-exec" {
-     command = "instance is destroyed"
-     when = destroy
+  }
+  #stops the nginx then after that it will destroy
+  provisioner "remote-exec" {
+    inline = [
+      "sudo systemctl stop nginx",
+      "echo 'nginx stopped succesfully'"
+    ]
+    when = destroy
   }
   # Optional: User data to run a script on instance launch
   # user_data = file("install_script.sh")
